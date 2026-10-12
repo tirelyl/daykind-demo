@@ -4,7 +4,17 @@
 
 面向海外消费者的中英文生活方式商品选购 Demo。包含 30 件固定商品、响应式浏览与筛选、游客购物车、真实注册登录、云端购物车、模拟结账和订单快照。
 
-技术栈：React / TypeScript / Vite、TanStack Router / Query / Form、Tailwind CSS / shadcn/ui、i18next / react-i18next、Zod、MSW、Supabase Auth / Postgres / Edge Functions。没有 NestJS 或真实支付服务。
+线上演示：[https://daykind-demo.onrender.com](https://daykind-demo.onrender.com)。已完成内容、验证范围、已知问题及主要取舍见[项目总结](docs/project-summary.md)。
+
+技术栈：React / TypeScript / Vite、TanStack Router / Query / Form、Tailwind CSS / shadcn/ui、i18next / react-i18next、Zod、MSW、Supabase Auth / Postgres / Edge Functions。支付流程使用模拟支付。
+
+## 演示视频
+
+演示商品浏览与筛选、购物车、登录、模拟结账与订单，以及移动端布局，时长约 1 分 45 秒。
+
+[![Daykind 演示视频，点击封面打开](docs/media/daykind-demo-cover.jpg)](docs/media/daykind-demo.mp4)
+
+[观看或下载演示视频（MP4）](docs/media/daykind-demo.mp4)
 
 ## 本地启动
 
@@ -108,9 +118,9 @@ Edge Function 验证访问令牌，校验商品 SKU / 数量 / 固定库存，�
 - `supabase/functions/checkout/`：真实身份认证和模拟支付入口。
 - `tests/`：单测、真实后端集成、浏览器测试。
 
-## 后续上线
+## 线上部署
 
-当前只完成本地实现与验证，没有创建或部署任何云端资源。下一步使用 Supabase 免费项目 + Render 静态站点；具体步骤见 [部署说明](docs/deployment.md)。免费额度以实际账号当时的政策为准。
+当前已使用 Supabase + Render 静态站点部署，线上业务流程由项目负责人手动验证通过。部署和后续更新步骤见[部署说明](docs/deployment.md)，实际验证范围见[项目总结](docs/project-summary.md)。免费额度以实际账号当时的政策为准。
 
 本版本不含真实支付、库存扣减、后台管理、汇率、优惠券、邮件通知或找回密码。
 

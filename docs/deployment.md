@@ -1,11 +1,11 @@
 # Supabase + Render 部署
 
-此文档准备了后续上线步骤；当前没有执行云端部署。
+当前项目已部署至 [https://daykind-demo.onrender.com](https://daykind-demo.onrender.com)，线上业务流程由项目负责人手动验证通过。本文保留环境配置和部署步骤，供后续更新或重新部署使用。
 
 ## Supabase
 
 1. 创建免费项目，保存项目 URL 和 **publishable key**。服务端 secret / service_role key 只在 Supabase 服务端使用。
-2. 在 Auth → Providers → Email 关闭 **Confirm email**；允许邮箱密码注册，密码长度至少 8 位。此 Demo 不配置 SMTP、邮件确认或密码重置。
+2. 在 Authentication → Sign In / Providers 主页面的 **User Signups** 区域关闭 **Confirm email** 并保存；保持邮箱密码注册开启，密码长度至少 8 位。此 Demo 不配置 SMTP、邮件确认或密码重置。
 3. 登录并关联 CLI：
 
 ```bash
@@ -18,7 +18,7 @@ pnpm exec supabase db push
 
 ```bash
 pnpm exec supabase secrets set ALLOWED_ORIGINS=https://YOUR_SITE.onrender.com
-pnpm exec supabase functions deploy checkout
+pnpm exec supabase functions deploy checkout --use-api
 ```
 
 函数 `verify_jwt=false` 是有意配置：代码使用 Supabase `auth.getUser(jwt)` 校验用户，支持当前平台的访问令牌；浏览器仍必须发送真实登录令牌。事务 RPC 仅授予 service_role，不能从浏览器直接调用。Supabase 自动为函数提供平台所需服务端环境变量。
