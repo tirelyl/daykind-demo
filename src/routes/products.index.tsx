@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import {
@@ -33,6 +34,8 @@ export const Route = createFileRoute('/products/')({
   component: Products,
 })
 function Products() {
+  const { t } = useTranslation()
+
   const search = Route.useSearch()
   const navigate = Route.useNavigate()
   const query = useQuery(catalogOptions(search))
@@ -50,8 +53,8 @@ function Products() {
   const filters = (
     <div className="filters">
       <fieldset>
-        <legend>Collection</legend>
-        {[{ id: 'all', name: 'All essentials' }, ...categories].map((c) => (
+        <legend>{t('Collection')}</legend>
+        {[{ id: 'all', name: t('All essentials') }, ...categories].map((c) => (
           <label
             key={c.id}
             className={search.category === c.id ? 'filter-selected' : ''}
@@ -65,17 +68,17 @@ function Products() {
                 update({ category: c.id as ProductSearch['category'] })
               }
             />
-            {c.name}
+            {t(c.name)}
           </label>
         ))}
       </fieldset>
       <fieldset>
-        <legend>Price range</legend>
+        <legend>{t('Price range')}</legend>
         {[
-          { id: 'all', name: 'Any price' },
-          { id: 'under25', name: 'Under $25' },
-          { id: '25to75', name: '$25 – $75' },
-          { id: 'over75', name: 'Over $75' },
+          { id: 'all', name: t('Any price') },
+          { id: 'under25', name: t('Under $25') },
+          { id: '25to75', name: t('$25 – $75') },
+          { id: 'over75', name: t('Over $75') },
         ].map((c) => (
           <label key={c.id}>
             <input
@@ -84,7 +87,7 @@ function Products() {
               checked={search.price === c.id}
               onChange={() => update({ price: c.id as ProductSearch['price'] })}
             />
-            {c.name}
+            {t(c.name)}
           </label>
         ))}
       </fieldset>
@@ -93,38 +96,38 @@ function Products() {
           className="text-link"
           onClick={() => update({ category: 'all', price: 'all' })}
         >
-          Clear filters
+          {t('Clear filters')}
           <X size={14} />
         </button>
       )}
       <div className="filter-note">
-        Thoughtfully chosen.
+        {t('Thoughtfully chosen.')}
         <br />
-        Made for your everyday.
+        {t('Made for your everyday.')}
       </div>
     </div>
   )
   return (
     <div className="wrap section catalog-page">
       <div className="breadcrumbs">
-        <Link to="/">Home</Link>
+        <Link to="/">{t('Home')}</Link>
         <span>/</span>
-        <span>The collection</span>
+        <span>{t('The collection')}</span>
       </div>
       <div className="catalog-title">
         <div>
-          <p className="section-kicker">The everyday collection</p>
+          <p className="section-kicker">{t('The everyday collection')}</p>
           <h1>
             {search.category === 'all'
-              ? 'Good things, all together.'
-              : categories.find((c) => c.id === search.category)?.name}
+              ? t('Good things, all together.')
+              : t(categories.find((c) => c.id === search.category)?.name ?? '')}
           </h1>
-          <p>Useful objects. Quiet character. A little everyday joy.</p>
+          <p>{t('Useful objects. Quiet character. A little everyday joy.')}</p>
         </div>
-        <span className="catalog-count">30 considered essentials</span>
+        <span className="catalog-count">{t('30 considered essentials')}</span>
       </div>
       <div className="catalog-layout">
-        <aside className="desktop-filters" aria-label="Product filters">
+        <aside className="desktop-filters" aria-label={t('Product filters')}>
           {filters}
         </aside>
         <div className="catalog-results">
@@ -139,15 +142,15 @@ function Products() {
               <Search size={18} />
               <Input
                 type="search"
-                aria-label="Search the collection"
-                placeholder="Find your next favorite…"
+                aria-label={t('Search the collection')}
+                placeholder={t('Find your next favorite…')}
                 value={draft}
                 onChange={(e) => {
                   setDraft(e.target.value)
                   if (!e.target.value) update({ q: '' })
                 }}
               />
-              <button aria-label="Submit search" type="submit">
+              <button aria-label={t('Submit search')} type="submit">
                 <ArrowRight size={17} />
               </button>
             </form>
@@ -155,42 +158,46 @@ function Products() {
               <SheetTrigger asChild>
                 <Button className="mobile-filter-button" variant="outline">
                   <SlidersHorizontal size={17} />
-                  Filters{filterCount ? ` (${filterCount})` : ''}
+                  {t('Filters')}
+                  {filterCount ? ` (${filterCount})` : ''}
                 </Button>
               </SheetTrigger>
               <SheetContent side="left">
                 <SheetHeader>
-                  <SheetTitle>Find your everyday</SheetTitle>
-                  <SheetDescription>Filter the collection.</SheetDescription>
+                  <SheetTitle>{t('Find your everyday')}</SheetTitle>
+                  <SheetDescription>
+                    {t('Filter the collection.')}
+                  </SheetDescription>
                 </SheetHeader>
                 {filters}
                 <Button
                   className="filter-done"
                   onClick={() => setFiltersOpen(false)}
                 >
-                  Show results
+                  {t('Show results')}
                 </Button>
               </SheetContent>
             </Sheet>
             <label className="sort-label">
-              <span className="sr-only">Sort products</span>
+              <span className="sr-only">{t('Sort products')}</span>
               <select
                 value={search.sort}
                 onChange={(e) =>
                   update({ sort: e.target.value as ProductSearch['sort'] })
                 }
               >
-                <option value="featured">Our favorites</option>
-                <option value="price-asc">Price: low to high</option>
-                <option value="price-desc">Price: high to low</option>
-                <option value="name">Name: A–Z</option>
+                <option value="featured">{t('Our favorites')}</option>
+                <option value="price-asc">{t('Price: low to high')}</option>
+                <option value="price-desc">{t('Price: high to low')}</option>
+                <option value="name">{t('Name: A–Z')}</option>
               </select>
             </label>
           </div>
           <div className="results-caption" aria-live="polite">
             {query.data
-              ? `${query.data.total} ${query.data.total === 1 ? 'essential' : 'essentials'}${search.q ? ` for “${search.q}”` : ''}`
-              : 'Finding the good things…'}
+              ? t('essentials', { count: query.data.total }) +
+                (search.q ? t(' for “{{query}}”', { query: search.q }) : '')
+              : t('Finding the good things…')}
             {search.q && (
               <button
                 onClick={() => {
@@ -198,7 +205,7 @@ function Products() {
                   update({ q: '' })
                 }}
               >
-                Clear search
+                {t('Clear search')}
                 <X size={13} />
               </button>
             )}
@@ -217,24 +224,27 @@ function Products() {
                   <ProductCard key={p.id} product={p} />
                 ))}
               </div>
-              <nav className="pagination" aria-label="Pagination">
+              <nav className="pagination" aria-label={t('Pagination')}>
                 <Button
                   variant="outline"
                   size="icon"
                   disabled={search.page === 1}
-                  aria-label="Previous page"
+                  aria-label={t('Previous page')}
                   onClick={() => update({ page: search.page - 1 })}
                 >
                   <ArrowLeft size={16} />
                 </Button>
                 <span>
-                  Page {search.page} of {query.data.pages}
+                  {t('Page {{page}} of {{pages}}', {
+                    page: search.page,
+                    pages: query.data.pages,
+                  })}
                 </span>
                 <Button
                   variant="outline"
                   size="icon"
                   disabled={search.page >= query.data.pages}
-                  aria-label="Next page"
+                  aria-label={t('Next page')}
                   onClick={() => update({ page: search.page + 1 })}
                 >
                   <ArrowRight size={16} />
@@ -244,8 +254,12 @@ function Products() {
           ) : (
             <div className="empty-state">
               <Search size={30} />
-              <h2>No favorites found just yet.</h2>
-              <p>Try a different search or give your filters a little room.</p>
+              <h2>{t('No favorites found just yet.')}</h2>
+              <p>
+                {t(
+                  'Try a different search or give your filters a little room.',
+                )}
+              </p>
               <Button
                 variant="outline"
                 onClick={() => {
@@ -253,7 +267,7 @@ function Products() {
                   void navigate({ search: defaultSearch })
                 }}
               >
-                Reset the collection
+                {t('Reset the collection')}
               </Button>
             </div>
           )}

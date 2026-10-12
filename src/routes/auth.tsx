@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
@@ -7,7 +8,29 @@ import { Button } from '../components/ui/button'
 import { Input } from '../components/ui/input'
 import { ErrorState, Loading } from '../components/states'
 import { useAuth } from '../lib/auth'
+import { translateMessage } from '../lib/i18n'
 import { backendConfigured, supabase } from '../lib/supabase'
+
+function authErrorMessage(error: {
+  code?: string
+  message: string
+  status?: number
+}) {
+  const messages: Record<string, string> = {
+    invalid_credentials: 'Invalid login credentials',
+    user_already_exists: 'User already registered',
+    email_exists: 'User already registered',
+    email_not_confirmed: 'Email not confirmed',
+    weak_password: 'Password does not meet the security requirements.',
+    validation_failed: 'Enter a valid email address.',
+    over_request_rate_limit: 'Too many requests. Please try again later.',
+    over_email_send_rate_limit: 'Too many requests. Please try again later.',
+  }
+  if (error.status === 429) return 'Too many requests. Please try again later.'
+  if (/fetch|network|connection/i.test(error.message))
+    return 'Unable to connect. Please check your connection and try again.'
+  return messages[error.code ?? ''] || error.message
+}
 
 const schema = z.object({
   email: z.email('Enter a valid email address.'),
@@ -23,6 +46,8 @@ export const Route = createFileRoute('/auth')({
   component: Auth,
 })
 function Auth() {
+  const { t } = useTranslation()
+
   const [mode, setMode] = useState<'signin' | 'signup'>('signin')
   const [error, setError] = useState('')
   const auth = useAuth()
@@ -44,7 +69,7 @@ function Auth() {
           ? await supabase.auth.signUp(value)
           : await supabase.auth.signInWithPassword(value)
       if (result.error) {
-        setError(result.error.message)
+        setError(authErrorMessage(result.error))
         return
       }
       if (!result.data.session) {
@@ -61,11 +86,11 @@ function Auth() {
     return (
       <div className="wrap section account-panel">
         <Leaf size={35} />
-        <h1>Make yourself at home.</h1>
-        <p>You're signed in as {auth.user.email}.</p>
+        <h1>{t('Make yourself at home.')}</h1>
+        <p>{t("You're signed in as {{email}}.", { email: auth.user.email })}</p>
         <Button asChild>
           <Link to={redirect}>
-            Continue
+            {t('Continue')}
             <ArrowRight size={16} />
           </Link>
         </Button>
@@ -77,7 +102,7 @@ function Auth() {
               .catch(() => setError('Sign out failed. Please retry.'))
           }
         >
-          Sign out
+          {t('Sign out')}
         </Button>
         {error && <ErrorState message={error} />}
       </div>
@@ -87,28 +112,34 @@ function Auth() {
       <div className="auth-story">
         <Leaf size={45} strokeWidth={1} />
         <h2>
-          A place for
+          {t('A place for')}
           <br />
-          your favorites.
+          {t('your favorites.')}
         </h2>
         <p>
-          Keep your bag close, revisit your orders,
+          {t('Keep your bag close, revisit your orders,')}
           <br />
-          and make room for a little everyday joy.
+          {t('and make room for a little everyday joy.')}
         </p>
-        <span>Good things, wherever you are.</span>
+        <span>{t('Good things, wherever you are.')}</span>
       </div>
       <div className="auth-form">
-        <p className="section-kicker">Welcome to Everyday Edit</p>
+        <p className="section-kicker">{t('Welcome to Everyday Edit')}</p>
         <h1>
-          {mode === 'signin' ? 'Good to see you.' : 'Make yourself at home.'}
+          {mode === 'signin'
+            ? t('Good to see you.')
+            : t('Make yourself at home.')}
         </h1>
         <p>
           {mode === 'signin'
-            ? 'Sign in to pick up where you left off.'
-            : 'A few details, and you’re part of the everyday.'}
+            ? t('Sign in to pick up where you left off.')
+            : t('A few details, and you’re part of the everyday.')}
         </p>
-        <div className="auth-tabs" role="group" aria-label="Account action">
+        <div
+          className="auth-tabs"
+          role="group"
+          aria-label={t('Account action')}
+        >
           <button
             aria-pressed={mode === 'signin'}
             onClick={() => {
@@ -116,7 +147,7 @@ function Auth() {
               setError('')
             }}
           >
-            Sign in
+            {t('Sign in')}
           </button>
           <button
             aria-pressed={mode === 'signup'}
@@ -125,7 +156,7 @@ function Auth() {
               setError('')
             }}
           >
-            Create account
+            {t('Create account')}
           </button>
         </div>
         <form
@@ -148,7 +179,7 @@ function Auth() {
               {(field) => (
                 <div className="form-field">
                   <label htmlFor={name}>
-                    {name === 'email' ? 'Email address' : 'Password'}
+                    {name === 'email' ? t('Email address') : t('Password')}
                   </label>
                   <Input
                     id={name}
@@ -168,14 +199,20 @@ function Auth() {
                     aria-invalid={!!field.state.meta.errors.length}
                     aria-describedby={`${name}-error`}
                   />
-                  {name === 'password' && <small>At least 8 characters.</small>}
+                  {name === 'password' && (
+                    <small>{t('At least 8 characters.')}</small>
+                  )}
                   <span
                     id={`${name}-error`}
                     className="field-error"
                     aria-live="polite"
                   >
                     {field.state.meta.errors
-                      .map((e) => (typeof e === 'string' ? e : e?.message))
+                      .map((e) =>
+                        translateMessage(
+                          typeof e === 'string' ? e : e?.message,
+                        ),
+                      )
                       .join(' ')}
                   </span>
                 </div>
@@ -192,19 +229,19 @@ function Auth() {
                 disabled={pending}
               >
                 {pending
-                  ? 'One moment…'
+                  ? t('One moment…')
                   : mode === 'signin'
-                    ? 'Sign in'
-                    : 'Create your account'}
+                    ? t('Sign in')
+                    : t('Create your account')}
                 <ArrowRight size={17} />
               </Button>
             )}
           </form.Subscribe>
         </form>
         <p className="auth-note">
-          Demo accounts use real local authentication.
+          {t('Demo accounts use real local authentication.')}
           <br />
-          No real payments. No marketing emails.
+          {t('No real payments. No marketing emails.')}
         </p>
       </div>
     </div>

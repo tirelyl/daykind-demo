@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Link } from '@tanstack/react-router'
 import { Minus, Plus, Trash2, Truck } from 'lucide-react'
 import type { ReactNode } from 'react'
@@ -13,6 +14,8 @@ export function BagLine({
   line: CartLine
   readOnly?: boolean
 }) {
+  const { t } = useTranslation()
+
   const cart = useCart()
   try {
     const { product, variant } = resolveLine(line)
@@ -25,21 +28,23 @@ export function BagLine({
         >
           <img
             src={product.image}
-            alt={product.name}
+            alt={t(product.name)}
             width={160}
             height={160}
           />
         </Link>
         <div className="bag-info">
           <Link to="/products/$productId" params={{ productId: product.id }}>
-            <h3>{product.name}</h3>
+            <h3>{t(product.name)}</h3>
           </Link>
-          <p>{variant.label}</p>
+          <p>{t(variant.label)}</p>
           <span>{money(product.price)}</span>
           {!readOnly && (
             <div className="quantity-control">
               <button
-                aria-label={`Decrease ${product.name} quantity`}
+                aria-label={t('Decrease {{name}} quantity', {
+                  name: t(product.name),
+                })}
                 disabled={line.quantity <= 1 || cart.busy}
                 onClick={() => cart.update(line, line.quantity - 1)}
               >
@@ -47,7 +52,9 @@ export function BagLine({
               </button>
               <span>{line.quantity}</span>
               <button
-                aria-label={`Increase ${product.name} quantity`}
+                aria-label={t('Increase {{name}} quantity', {
+                  name: t(product.name),
+                })}
                 disabled={
                   line.quantity >= Math.min(99, variant.stock) || cart.busy
                 }
@@ -57,7 +64,9 @@ export function BagLine({
               </button>
             </div>
           )}
-          {readOnly && <small>Qty {line.quantity}</small>}
+          {readOnly && (
+            <small>{t('Qty {{count}}', { count: line.quantity })}</small>
+          )}
         </div>
         <div className="bag-line-end">
           <strong>{money(product.price * line.quantity)}</strong>
@@ -65,7 +74,7 @@ export function BagLine({
             <Button
               variant="ghost"
               size="icon"
-              aria-label={`Remove ${product.name}`}
+              aria-label={t('Remove {{name}}', { name: t(product.name) })}
               disabled={cart.busy}
               onClick={() => cart.update(line, 0)}
             >
@@ -78,38 +87,42 @@ export function BagLine({
   } catch {
     return (
       <div className="error-state">
-        This item is no longer available.
+        {t('This item is no longer available.')}
         <Button variant="outline" onClick={() => cart.update(line, 0)}>
-          Remove item
+          {t('Remove item')}
         </Button>
       </div>
     )
   }
 }
 export function Summary({ children }: { children?: ReactNode }) {
+  const { t } = useTranslation()
+
   const cart = useCart()
   return (
     <aside className="order-summary">
-      <h2>A little summary</h2>
+      <h2>{t('A little summary')}</h2>
       <div className="summary-row">
-        <span>Subtotal</span>
+        <span>{t('Subtotal')}</span>
         <span>{money(cart.totals.subtotal)}</span>
       </div>
       <div className="summary-row">
-        <span>Shipping</span>
+        <span>{t('Shipping')}</span>
         <span>
-          {cart.totals.shipping === 0 ? 'On us' : money(cart.totals.shipping)}
+          {cart.totals.shipping === 0
+            ? t('On us')
+            : money(cart.totals.shipping)}
         </span>
       </div>
       <div className="summary-row">
         <span>
-          Tax <small>(demo)</small>
+          {t('Tax')} <small>{t('(demo)')}</small>
         </span>
-        <span>$0.00</span>
+        <span>{money(0)}</span>
       </div>
       <div className="summary-total">
         <span>
-          Total <small>USD</small>
+          {t('Total')} <small>USD</small>
         </span>
         <strong>{money(cart.totals.total)}</strong>
       </div>
@@ -118,8 +131,10 @@ export function Summary({ children }: { children?: ReactNode }) {
         <Truck size={17} />
         <p>
           {cart.totals.subtotal >= 7500
-            ? 'Your order ships for free.'
-            : `You're ${money(7500 - cart.totals.subtotal)} away from free shipping.`}
+            ? t('Your order ships for free.')
+            : t("You're {{amount}} away from free shipping.", {
+                amount: money(7500 - cart.totals.subtotal),
+              })}
         </p>
       </div>
       <div className="progress-track">
@@ -127,7 +142,9 @@ export function Summary({ children }: { children?: ReactNode }) {
           style={{ width: `${Math.min(100, cart.totals.subtotal / 75)}%` }}
         />
       </div>
-      <p className="summary-note">Demo store. No real payment will be taken.</p>
+      <p className="summary-note">
+        {t('Demo store. No real payment will be taken.')}
+      </p>
     </aside>
   )
 }

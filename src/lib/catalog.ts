@@ -1,14 +1,12 @@
 import { queryOptions } from '@tanstack/react-query'
 import { z } from 'zod'
 import type { Product } from '../../supabase/functions/_shared/catalog'
+import i18n from './i18n'
 
 export { categories, products } from '../../supabase/functions/_shared/catalog'
 export type { Product } from '../../supabase/functions/_shared/catalog'
-export {
-  money,
-  totals,
-  resolveLine,
-} from '../../supabase/functions/_shared/commerce'
+export { money } from './i18n'
+export { totals, resolveLine } from '../../supabase/functions/_shared/commerce'
 export type {
   CartLine,
   Address,
@@ -30,12 +28,15 @@ export async function catalogRequest<T>(path: string): Promise<T> {
     throw new Error('The collection could not be loaded. Please try again.')
   return response.json()
 }
-export const catalogOptions = (search: ProductSearch) =>
+export const catalogOptions = (
+  search: ProductSearch,
+  language = i18n.language,
+) =>
   queryOptions({
-    queryKey: ['catalog', search],
+    queryKey: ['catalog', search, language],
     queryFn: () =>
       catalogRequest<{ products: Product[]; total: number; pages: number }>(
-        `products?${new URLSearchParams(Object.entries(search).map(([k, v]) => [k, String(v)]))}`,
+        `products?${new URLSearchParams([...Object.entries(search).map(([k, v]) => [k, String(v)]), ['language', language]])}`,
       ),
     staleTime: 60_000,
   })

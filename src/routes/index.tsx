@@ -1,3 +1,4 @@
+import { Trans, useTranslation } from 'react-i18next'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
@@ -8,56 +9,65 @@ import { catalogOptions, categories, defaultSearch } from '../lib/catalog'
 
 export const Route = createFileRoute('/')({ component: Home })
 function Home() {
+  const { t } = useTranslation()
+
   const featured = useQuery(catalogOptions(defaultSearch))
   return (
     <>
       <section className="hero">
         <div className="hero-copy">
-          <p className="hero-intro">Good things for everyday living</p>
+          <p className="hero-intro">{t('Good things for everyday living')}</p>
           <h1>
-            Make room <br />
-            for the{' '}
-            <em>
-              little <br className="desktop-break" /> things.
-            </em>
+            <Trans
+              i18nKey="Make room <line/>for the <em>little <desktop/> things.</em>"
+              components={{
+                line: <br />,
+                em: <em />,
+                desktop: <br className="desktop-break" />,
+              }}
+            />
           </h1>
           <p className="hero-description">
-            Thoughtful objects for your home, your rituals,
-            <br className="desktop-break" /> and wherever the day takes you.
+            <Trans
+              i18nKey="Thoughtful objects for your home, your rituals,<desktop/> and wherever the day takes you."
+              components={{ desktop: <br className="desktop-break" /> }}
+            />
           </p>
           <Button asChild size="lg">
             <Link to="/products" search={defaultSearch}>
-              Explore the collection
+              {t('Explore the collection')}
               <ArrowRight size={18} />
             </Link>
           </Button>
           <div className="hero-footnote">
             <span className="tiny-dot" />
-            Considered essentials. Everyday companions.
+            {t('Considered essentials. Everyday companions.')}
           </div>
         </div>
         <div className="hero-photo">
           <img
             src="/images/hero.jpg"
-            alt="A sunlit living room with natural textures, green plants and thoughtfully chosen objects"
+            alt={t(
+              'A sunlit living room with natural textures, green plants and thoughtfully chosen objects',
+            )}
             width={1800}
             height={1350}
             fetchPriority="high"
           />
           <div className="hero-caption">
-            <span>A slower kind of living.</span>
-            <span>01 / The everyday collection</span>
+            <span>{t('A slower kind of living.')}</span>
+            <span>{t('01 / The everyday collection')}</span>
           </div>
         </div>
       </section>
       <section className="wrap section featured">
         <div className="section-heading">
           <div>
-            <p className="section-kicker">The everyday favorites</p>
-            <h2>Good company for your day.</h2>
+            <p className="section-kicker">{t('The everyday favorites')}</p>
+            <h2>{t('Good company for your day.')}</h2>
           </div>
           <Link className="text-link" to="/products" search={defaultSearch}>
-            Shop all essentials
+            {t('Shop all essentials')}
             <ArrowRight size={17} />
           </Link>
         </div>
@@ -79,10 +89,10 @@ function Home() {
       <section className="wrap section categories-section">
         <div className="section-heading">
           <div>
-            <p className="section-kicker">Find your everyday</p>
-            <h2>A place for everything.</h2>
+            <p className="section-kicker">{t('Find your everyday')}</p>
+            <h2>{t('A place for everything.')}</h2>
           </div>
-          <p>From slow mornings to days on the move.</p>
+          <p>{t('From slow mornings to days on the move.')}</p>
         </div>
         <div className="category-grid">
           {categories.map((c, i) => (
@@ -107,8 +117,8 @@ function Home() {
               </div>
               <div className="category-label">
                 <span>
-                  <h3>{c.name}</h3>
-                  <p>{c.description}</p>
+                  <h3>{t(c.name)}</h3>
+                  <p>{t(c.description)}</p>
                 </span>
                 <ArrowUpRight size={23} />
               </div>
@@ -122,18 +132,19 @@ function Home() {
             ee.
           </span>
           <div>
-            <p className="section-kicker">Less, but a little better</p>
+            <p className="section-kicker">{t('Less, but a little better')}</p>
             <h2>
-              Not more things.
+              {t('Not more things.')}
               <br />
-              More meaning in the everyday.
+              {t('More meaning in the everyday.')}
             </h2>
             <p>
-              We choose objects with a purpose and a little personality. <br />
-              The ones that quietly become your favorites.
+              {t('We choose objects with a purpose and a little personality.')}
+              <br />
+              {t('The ones that quietly become your favorites.')}
             </p>
             <Link className="text-link" to="/products" search={defaultSearch}>
-              Find your next favorite
+              {t('Find your next favorite')}
               <ArrowRight size={17} />
             </Link>
           </div>

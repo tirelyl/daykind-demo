@@ -1,8 +1,8 @@
 # Everyday Edit
 
-面向海外消费者的英文生活方式商品选购 Demo。包含 30 件固定商品、响应式浏览与筛选、游客购物车、真实注册登录、云端购物车、模拟结账和订单快照。
+面向海外消费者的中英文生活方式商品选购 Demo。包含 30 件固定商品、响应式浏览与筛选、游客购物车、真实注册登录、云端购物车、模拟结账和订单快照。
 
-技术栈：React / TypeScript / Vite、TanStack Router / Query / Form、Tailwind CSS / shadcn/ui、Zod、MSW、Supabase Auth / Postgres / Edge Functions。没有 NestJS 或真实支付服务。
+技术栈：React / TypeScript / Vite、TanStack Router / Query / Form、Tailwind CSS / shadcn/ui、i18next / react-i18next、Zod、MSW、Supabase Auth / Postgres / Edge Functions。没有 NestJS 或真实支付服务。
 
 ## 本地启动
 
@@ -41,6 +41,16 @@ pnpm dev
 6. 订单详情和列表在刷新、重新登录后仍可读取。支付均明确标注 Mock，不收集银行卡信息。
 
 运费为 $6.99，商品小计满 $75 免费，税额为演示值 $0。所有金额使用整数分。
+
+## 中英文切换
+
+页面右上角的 `EN / 中文` 下拉框支持即时切换，默认英文。语言选择存储在 localStorage 的 `ee-language` 中，刷新后仍会保留；存储不可用时仍能在当前页面切换。
+
+导航、商品名称与描述、规格、筛选、购物袋、表单校验、结账及订单状态均已接入翻译。搜索同时匹配中英文商品名称和描述，名称排序按当前语言进行。切换语言保留当前 URL 筛选、购物袋及表单输入。
+
+金额和订单日期按语言格式化，计价币种始终为 USD，收货国家仍为美国。商品 ID、SKU 和订单成交快照保持原始值；订单展示时翻译已知名称，未知的历史名称保留原文。无需修改数据库或环境变量。
+
+界面中文词条位于 `src/locales/zh.ts`，以英文原文为翻译键；商品中文内容位于 `src/locales/catalog.ts`，按稳定商品 ID 维护。英文与中文资源随应用打包，不请求远程翻译服务。入口配置为 `src/lib/i18n.ts`。
 
 ## 检查与测试
 
@@ -100,6 +110,6 @@ Edge Function 验证访问令牌，校验商品 SKU / 数量 / 固定库存，�
 
 当前只完成本地实现与验证，没有创建或部署任何云端资源。下一步使用 Supabase 免费项目 + Render 静态站点；具体步骤见 [部署说明](docs/deployment.md)。免费额度以实际账号当时的政策为准。
 
-本版本不含真实支付、库存扣减、后台管理、多语言、汇率、优惠券、邮件通知或找回密码。
+本版本不含真实支付、库存扣减、后台管理、汇率、优惠券、邮件通知或找回密码。
 
 [视觉规范](docs/design.md) · [素材来源](docs/assets.md) · [初始化与文档记录](docs/implementation.md)

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { Link, Outlet, useRouterState } from '@tanstack/react-router'
 import {
@@ -30,8 +31,11 @@ import { Button } from './ui/button'
 import { useCart } from '../lib/cart'
 import { useAuth } from '../lib/auth'
 import { categories, defaultSearch } from '../lib/catalog'
+import { LanguageSwitcher } from './language-switcher'
 
 export function Shell() {
+  const { t } = useTranslation()
+
   const cart = useCart()
   const auth = useAuth()
   const [menu, setMenu] = useState(false)
@@ -44,7 +48,7 @@ export function Shell() {
         search={defaultSearch}
         onClick={() => setMenu(false)}
       >
-        Shop all
+        {t('Shop all')}
       </Link>
       {categories.map((c) => (
         <Link
@@ -56,7 +60,7 @@ export function Shell() {
           }}
           onClick={() => setMenu(false)}
         >
-          {c.name}
+          {t(c.name)}
         </Link>
       ))}
       <button
@@ -65,25 +69,25 @@ export function Shell() {
           setInfo('story')
         }}
       >
-        Our philosophy
+        {t('Our philosophy')}
       </button>
     </>
   )
   return (
     <>
       <a href="#main" className="skip-link">
-        Skip to content
+        {t('Skip to content')}
       </a>
       <div className="announcement">
-        A little more joy in your everyday.
-        <span>Free US shipping on orders $75+</span>
+        {t('A little more joy in your everyday.')}
+        <span>{t('Free US shipping on orders $75+')}</span>
       </div>
       <header className="site-header">
         <div className="header-inner">
           <div className="mobile-menu">
             <Sheet open={menu} onOpenChange={setMenu}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" aria-label="Open menu">
+                <Button variant="ghost" size="icon" aria-label={t('Open menu')}>
                   <Menu size={21} />
                 </Button>
               </SheetTrigger>
@@ -91,30 +95,32 @@ export function Shell() {
                 <SheetHeader>
                   <SheetTitle>Everyday Edit</SheetTitle>
                   <SheetDescription>
-                    Good things for everyday living.
+                    {t('Good things for everyday living.')}
                   </SheetDescription>
                 </SheetHeader>
-                <nav className="mobile-nav" aria-label="Mobile navigation">
+                <nav className="mobile-nav" aria-label={t('Mobile navigation')}>
                   {nav}
                 </nav>
               </SheetContent>
             </Sheet>
           </div>
-          <Link to="/" className="brand" aria-label="Everyday Edit home">
+          <Link to="/" className="brand" aria-label={t('Everyday Edit home')}>
             <span className="brand-mark">
               <Leaf size={25} strokeWidth={1.4} />
             </span>
             everyday edit<span className="brand-period">.</span>
           </Link>
-          <nav className="desktop-nav" aria-label="Main navigation">
+          <nav className="desktop-nav" aria-label={t('Main navigation')}>
             {nav}
           </nav>
           <div className="header-actions">
+            <LanguageSwitcher />
             <Button variant="ghost" size="icon" asChild>
               <Link
+                className="header-search"
                 to="/products"
                 search={defaultSearch}
-                aria-label="Search products"
+                aria-label={t('Search products')}
               >
                 <Search size={20} />
               </Link>
@@ -122,7 +128,9 @@ export function Shell() {
             <Button variant="ghost" size="icon" asChild>
               <Link
                 to={auth.user ? '/orders' : '/auth'}
-                aria-label={auth.user ? 'Your account and orders' : 'Sign in'}
+                aria-label={
+                  auth.user ? t('Your account and orders') : t('Sign in')
+                }
               >
                 <UserRound size={20} />
               </Link>
@@ -130,7 +138,9 @@ export function Shell() {
             <Link
               to="/cart"
               className="bag-link"
-              aria-label={`Shopping bag, ${cart.count} items`}
+              aria-label={t('Shopping bag, {{count}} items', {
+                count: cart.count,
+              })}
             >
               <ShoppingBag size={20} />
               <span className="bag-count">{cart.count}</span>
@@ -145,21 +155,22 @@ export function Shell() {
         <div>
           <Truck size={23} />
           <span>
-            Free shipping over $75
-            <small>Good things, delivered to your door.</small>
+            {t('Free shipping over $75')}
+            <small>{t('Good things, delivered to your door.')}</small>
           </span>
         </div>
         <div>
           <RotateCcw size={23} />
           <span>
-            Room to change your mind
-            <small>A 30-day return policy in our demo store.</small>
+            {t('Room to change your mind')}
+            <small>{t('A 30-day return policy in our demo store.')}</small>
           </span>
         </div>
         <div>
           <Leaf size={23} />
           <span>
-            Chosen with intention<small>Fewer things. More everyday joy.</small>
+            {t('Chosen with intention')}
+            <small>{t('Fewer things. More everyday joy.')}</small>
           </span>
         </div>
       </div>
@@ -170,49 +181,51 @@ export function Shell() {
               everyday edit.
             </Link>
             <p>
-              Thoughtful objects.
-              <br />A more considered everyday.
+              {t('Thoughtful objects.')}
+              <br />
+              {t('A more considered everyday.')}
             </p>
             <span className="footer-note">
-              An independent collection of good things.
+              {t('An independent collection of good things.')}
             </span>
           </div>
           <div>
-            <h2>Make yourself at home</h2>
+            <h2>{t('Make yourself at home')}</h2>
             <Link to="/products" search={defaultSearch}>
-              Shop the collection
+              {t('Shop the collection')}
             </Link>
-            <Link to="/orders">Your orders</Link>
+            <Link to="/orders">{t('Your orders')}</Link>
             <button onClick={() => setInfo('shipping')}>
-              Shipping & returns
+              {t('Shipping & returns')}
             </button>
             <button onClick={() => setInfo('story')}>
-              Our philosophy <ArrowUpRight size={12} />
+              {t('Our philosophy')}
+              <ArrowUpRight size={12} />
             </button>
           </div>
           <div className="footer-message">
-            <h2>Small things, better days.</h2>
+            <h2>{t('Small things, better days.')}</h2>
             <p>
-              Objects you reach for. Details you notice.
+              {t('Objects you reach for. Details you notice.')}
               <br />
-              Made for the moments in between.
+              {t('Made for the moments in between.')}
             </p>
-            <div className="currency">United States · USD $</div>
+            <div className="currency">{t('United States · USD $')}</div>
           </div>
         </div>
         <div className="wrap footer-bottom">
           <span>© {new Date().getFullYear()} Everyday Edit</span>
-          <span>Demo store · All payments are simulated</span>
+          <span>{t('Demo store · All payments are simulated')}</span>
           {auth.user && (
             <button
               onClick={() =>
                 void auth
                   .signOut()
-                  .then(() => toast.success('Signed out'))
-                  .catch(() => toast.error('Sign out failed. Please retry.'))
+                  .then(() => toast.success(t('Signed out')))
+                  .catch(() => toast.error(t('Sign out failed. Please retry.')))
               }
             >
-              Sign out
+              {t('Sign out')}
             </button>
           )}
         </div>
@@ -227,13 +240,17 @@ export function Shell() {
           <DialogHeader>
             <DialogTitle>
               {info === 'story'
-                ? 'A little more considered.'
-                : 'Good things, delivered.'}
+                ? t('A little more considered.')
+                : t('Good things, delivered.')}
             </DialogTitle>
             <DialogDescription>
               {info === 'story'
-                ? 'We believe the things you use every day deserve a little thought. Everyday Edit brings together useful objects with quiet character, for home and wherever the day takes you. This is a demonstration store; products and orders are for testing.'
-                : 'Our demo uses US delivery: $6.99 flat rate, free on merchandise orders of $75 or more. Tax is a demo value of $0. A 30-day return policy is shown for presentation only. No parcels are shipped and no money is charged.'}
+                ? t(
+                    'We believe the things you use every day deserve a little thought. Everyday Edit brings together useful objects with quiet character, for home and wherever the day takes you. This is a demonstration store; products and orders are for testing.',
+                  )
+                : t(
+                    'Our demo uses US delivery: $6.99 flat rate, free on merchandise orders of $75 or more. Tax is a demo value of $0. A 30-day return policy is shown for presentation only. No parcels are shipped and no money is charged.',
+                  )}
             </DialogDescription>
           </DialogHeader>
         </DialogContent>

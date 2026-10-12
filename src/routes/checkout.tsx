@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
@@ -10,6 +11,7 @@ import { Input } from '../components/ui/input'
 import { Empty, ErrorState, Loading } from '../components/states'
 import { useAuth } from '../lib/auth'
 import { useCart } from '../lib/cart'
+import { translateMessage } from '../lib/i18n'
 import {
   addressSchema,
   CheckoutError,
@@ -37,6 +39,8 @@ const completions = {
 }
 export const Route = createFileRoute('/checkout')({ component: Checkout })
 function Checkout() {
+  const { t } = useTranslation()
+
   const auth = useAuth()
   const cart = useCart()
   const navigate = useNavigate()
@@ -114,16 +118,16 @@ function Checkout() {
       form.setFieldValue('email', auth.user.email ?? '')
   }, [auth.user?.id])
   if (auth.loading || cart.loading)
-    return <Loading label="Preparing checkout…" />
+    return <Loading label={t('Preparing checkout…')} />
   if (!auth.user)
     return (
       <div className="wrap section account-panel">
         <LockKeyhole size={30} />
-        <h1>A place for your order.</h1>
-        <p>Sign in to save your bag and continue to checkout.</p>
+        <h1>{t('A place for your order.')}</h1>
+        <p>{t('Sign in to save your bag and continue to checkout.')}</p>
         <Button asChild>
           <Link to="/auth" search={{ redirect: '/checkout' }}>
-            Sign in to continue
+            {t('Sign in to continue')}
             <ArrowRight size={17} />
           </Link>
         </Button>
@@ -135,24 +139,26 @@ function Checkout() {
         <FlaskConical size={30} />
         <h1>
           {processing
-            ? 'Confirming your demo order…'
-            : 'Pick up this checkout attempt.'}
+            ? t('Confirming your demo order…')
+            : t('Pick up this checkout attempt.')}
         </h1>
         <p>
-          Your attempt for {activeAttempt.address.name} is saved in this tab.
-          Recover it to check the result safely.
+          {t(
+            'Your attempt for {{name}} is saved in this tab. Recover it to check the result safely.',
+            { name: activeAttempt.address.name },
+          )}
         </p>
-        <p>No real money will be charged.</p>
+        <p>{t('No real money will be charged.')}</p>
         {error && <ErrorState message={error} />}
         <Button
           disabled={processing}
           onClick={() => void completeAttempt(activeAttempt)}
         >
-          {processing ? 'One moment…' : 'Recover checkout attempt'}
+          {processing ? t('One moment…') : t('Recover checkout attempt')}
           <ArrowRight size={16} />
         </Button>
         <Link to="/orders" className="text-link">
-          View saved orders
+          {t('View saved orders')}
         </Link>
       </div>
     )
@@ -165,29 +171,30 @@ function Checkout() {
   if (!cart.lines.length)
     return (
       <Empty
-        title="Your bag is waiting for a favorite."
-        description="Add a little something before checking out."
+        title={t('Your bag is waiting for a favorite.')}
+        description={t('Add a little something before checking out.')}
       />
     )
   return (
     <div className="wrap section">
       <div className="section-heading">
         <div>
-          <p className="section-kicker">Almost yours</p>
-          <h1>The final little details.</h1>
+          <p className="section-kicker">{t('Almost yours')}</p>
+          <h1>{t('The final little details.')}</h1>
         </div>
         <Link to="/cart" className="text-link">
           <ArrowLeft size={16} />
-          Back to your bag
+          {t('Back to your bag')}
         </Link>
       </div>
       <div className="mock-banner">
         <FlaskConical size={21} />
         <div>
-          <strong>This is a simulated checkout.</strong>
+          <strong>{t('This is a simulated checkout.')}</strong>
           <p>
-            No card details, no real charge, no shipment. Your demo order will
-            be saved to your account.
+            {t(
+              'No card details, no real charge, no shipment. Your demo order will be saved to your account.',
+            )}
           </p>
         </div>
       </div>
@@ -208,7 +215,8 @@ function Checkout() {
           <div>
             <section className="checkout-section">
               <h2>
-                <span>01</span>Where should it go?
+                <span>01</span>
+                {t('Where should it go?')}
               </h2>
               <div className="address-grid">
                 {(Object.keys(labels) as (keyof typeof labels)[]).map(
@@ -217,7 +225,7 @@ function Checkout() {
                       {(field) => (
                         <div className={`form-field field-${name}`}>
                           <label htmlFor={`shipping-${name}`}>
-                            {labels[name]}
+                            {t(labels[name])}
                           </label>
                           <Input
                             id={`shipping-${name}`}
@@ -259,7 +267,9 @@ function Checkout() {
                           >
                             {field.state.meta.errors
                               .map((e) =>
-                                typeof e === 'string' ? e : e?.message,
+                                translateMessage(
+                                  typeof e === 'string' ? e : e?.message,
+                                ),
                               )
                               .join(' ')}
                           </span>
@@ -269,20 +279,21 @@ function Checkout() {
                   ),
                 )}
                 <div className="form-field field-country">
-                  <label htmlFor="country">Country / region</label>
+                  <label htmlFor="country">{t('Country / region')}</label>
                   <Input
                     id="country"
-                    value="United States"
+                    value={t('United States')}
                     autoComplete="shipping country-name"
                     readOnly
                   />
-                  <small>US delivery in this demo.</small>
+                  <small>{t('US delivery in this demo.')}</small>
                 </div>
               </div>
             </section>
             <section className="checkout-section">
               <h2>
-                <span>02</span>Your good things
+                <span>02</span>
+                {t('Your good things')}
               </h2>
               {cart.lines.map((line) => (
                 <BagLine key={line.sku} line={line} readOnly />
@@ -290,10 +301,13 @@ function Checkout() {
             </section>
             <section className="checkout-section">
               <h2>
-                <span>03</span>Try the demo payment
+                <span>03</span>
+                {t('Try the demo payment')}
               </h2>
               <fieldset className="payment-options">
-                <legend className="sr-only">Simulated payment result</legend>
+                <legend className="sr-only">
+                  {t('Simulated payment result')}
+                </legend>
                 <label className={payment === 'succeeded' ? 'selected' : ''}>
                   <input
                     type="radio"
@@ -302,9 +316,9 @@ function Checkout() {
                     onChange={() => setPayment('succeeded')}
                   />
                   <span>
-                    <strong>Successful payment</strong>
+                    <strong>{t('Successful payment')}</strong>
                     <small>
-                      Save a confirmed order and clear purchased items.
+                      {t('Save a confirmed order and clear purchased items.')}
                     </small>
                   </span>
                 </label>
@@ -316,9 +330,9 @@ function Checkout() {
                     onChange={() => setPayment('failed')}
                   />
                   <span>
-                    <strong>Declined payment</strong>
+                    <strong>{t('Declined payment')}</strong>
                     <small>
-                      Save a failed attempt and keep your bag intact.
+                      {t('Save a failed attempt and keep your bag intact.')}
                     </small>
                   </span>
                 </label>
@@ -336,10 +350,10 @@ function Checkout() {
                   disabled={pending || cart.busy}
                 >
                   {pending
-                    ? 'Saving your order…'
+                    ? t('Saving your order…')
                     : error
-                      ? 'Retry mock payment'
-                      : 'Place demo order'}
+                      ? t('Retry mock payment')
+                      : t('Place demo order')}
                   <ArrowRight size={16} />
                 </Button>
               )}
@@ -351,12 +365,12 @@ function Checkout() {
                 variant="outline"
                 onClick={cart.retry}
               >
-                Refresh bag
+                {t('Refresh bag')}
               </Button>
             )}
             <p className="secure-note">
               <FlaskConical size={14} />
-              Mock payment · No real money charged
+              {t('Mock payment · No real money charged')}
             </p>
           </Summary>
         </div>

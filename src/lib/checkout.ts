@@ -2,10 +2,22 @@ import { z } from 'zod'
 import { supabase } from './supabase'
 
 export const addressSchema = z.object({
-  name: z.string().trim().min(2, 'Enter your full name.').max(200),
+  name: z
+    .string()
+    .trim()
+    .min(2, 'Enter your full name.')
+    .max(200, 'The value is too long.'),
   email: z.email('Enter a valid email.'),
-  address: z.string().trim().min(3, 'Enter your street address.').max(200),
-  city: z.string().trim().min(2, 'Enter your city.').max(200),
+  address: z
+    .string()
+    .trim()
+    .min(3, 'Enter your street address.')
+    .max(200, 'The value is too long.'),
+  city: z
+    .string()
+    .trim()
+    .min(2, 'Enter your city.')
+    .max(200, 'The value is too long.'),
   state: z
     .string()
     .regex(/^[A-Z]{2}$/, 'Use a two-letter state code, e.g. CA.'),

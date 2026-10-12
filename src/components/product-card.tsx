@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Link } from '@tanstack/react-router'
 import { ArrowUpRight, Plus } from 'lucide-react'
 import type { Product } from '../lib/catalog'
@@ -12,6 +13,8 @@ export function ProductCard({
   product: Product
   priority?: boolean
 }) {
+  const { t } = useTranslation()
+
   const cart = useCart()
   return (
     <article className="product-card">
@@ -19,25 +22,25 @@ export function ProductCard({
         <Link
           to="/products/$productId"
           params={{ productId: product.id }}
-          aria-label={`View ${product.name}`}
+          aria-label={t('View {{name}}', { name: t(product.name) })}
         >
           <img
             src={product.image}
-            alt={product.name}
+            alt={t(product.name)}
             width={480}
             height={480}
             loading={priority ? 'eager' : 'lazy'}
           />
         </Link>
         {product.badge && (
-          <span className="product-badge">{product.badge}</span>
+          <span className="product-badge">{t(product.badge)}</span>
         )}
         <Button
           className="quick-add"
           variant="secondary"
           size="icon"
           disabled={cart.busy || cart.loading || !!cart.error}
-          aria-label={`Add ${product.name} to bag`}
+          aria-label={t('Add {{name}} to bag', { name: t(product.name) })}
           onClick={() => {
             void cart
               .add({
@@ -54,11 +57,11 @@ export function ProductCard({
       <div className="product-meta">
         <div>
           <p className="product-category">
-            {categories.find((c) => c.id === product.category)?.name}
+            {t(categories.find((c) => c.id === product.category)?.name ?? '')}
           </p>
           <h3>
             <Link to="/products/$productId" params={{ productId: product.id }}>
-              {product.name}
+              {t(product.name)}
             </Link>
           </h3>
         </div>
@@ -67,7 +70,9 @@ export function ProductCard({
       <div
         className="product-colors"
         role="img"
-        aria-label={`${product.variants.length} color options`}
+        aria-label={t('{{count}} color options', {
+          count: product.variants.length,
+        })}
       >
         {product.variants.map((v) => (
           <span key={v.id} style={{ backgroundColor: v.color }} />

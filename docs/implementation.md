@@ -35,6 +35,8 @@ Playwright 使用官方 `pnpm create playwright --quiet --no-browsers --no-examp
 - [Supabase CLI](https://supabase.com/docs/guides/local-development/cli/getting-started)
 - [Supabase Edge Function auth](https://supabase.com/docs/guides/functions/auth)
 - [Playwright](https://playwright.dev/docs/intro)
+- [react-i18next quick start](https://react.i18next.com/guides/quick-start)
+- [i18next configuration](https://www.i18next.com/overview/configuration-options)
 - [Anthropic frontend-design skill](https://github.com/anthropics/skills/blob/main/skills/frontend-design/SKILL.md)
 - [Vercel web-design-guidelines skill](https://github.com/vercel-labs/agent-skills/blob/main/skills/web-design-guidelines/SKILL.md)
 
@@ -48,3 +50,6 @@ Playwright 使用官方 `pnpm create playwright --quiet --no-browsers --no-examp
 - 对不确定的网络失败保存完整 checkout 尝试，而非只保存幂等键；刷新后仍能查询已提交的订单。
 - 本地环境生成脚本不输出密钥；服务端测试密钥只进入忽略的 `.env.test.local`。
 - 静态素材、字体自托管，业务页面按文件路由拆包。
+- 国际化使用 i18next 26 / react-i18next 17，英文原文作为词条键，关闭 keySeparator / nsSeparator。资源本地打包；React hook 订阅语言切换，Trans 处理带换行与强调的完整文案。
+- 默认英文，仅保存用户明确选择的语言，不按浏览器环境自动改变演示语言。同步 html lang、页面标题与描述；金额和日期使用 Intl，货币保持 USD。
+- 商品中文内容仅用于展示与搜索；共享结账目录、数据库快照和支付逻辑保持原始业务值。错误在状态中保存原始消息，显示时翻译，切换语言后仍能更新。

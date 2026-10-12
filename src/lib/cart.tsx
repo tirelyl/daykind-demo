@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { translateMessage as t } from './i18n'
 import type { ReactNode } from 'react'
 import { useAuth } from './auth'
 import { supabase } from './supabase'
@@ -28,7 +29,7 @@ function saveGuest(lines: CartLine[]) {
   try {
     localStorage.setItem(storageKey, JSON.stringify(lines))
   } catch {
-    toast.error('Your browser could not save this bag. Keep this tab open.')
+    toast.error(t('Your browser could not save this bag. Keep this tab open.'))
   }
 }
 function useCartState() {
@@ -72,7 +73,7 @@ function useCartState() {
       saveGuest([])
       setGuest([])
       await queryClient.invalidateQueries({ queryKey: ['user', owner, 'cart'] })
-      toast.success('Your bag is saved to your account.')
+      toast.success(t('Your bag is saved to your account.'))
     } catch {
       setMergeError(
         'We could not save your guest bag. Your items are still on this device. Retry before checking out.',
@@ -139,12 +140,15 @@ function useCartState() {
     },
     onError: (error) =>
       toast.error(
-        error.message || 'Your bag could not be updated. Please retry.',
+        t(error.message || 'Your bag could not be updated. Please retry.'),
       ),
     onSuccess: (_data, { line, quantity }) => {
       if (quantity === 0)
-        toast('Removed from your bag', {
-          action: { label: 'Undo', onClick: () => update(line, line.quantity) },
+        toast(t('Removed from your bag'), {
+          action: {
+            label: t('Undo'),
+            onClick: () => update(line, line.quantity),
+          },
         })
     },
   })
@@ -154,7 +158,7 @@ function useCartState() {
   async function add(line: CartLine) {
     const current = lines.find((item) => item.sku === line.sku)?.quantity ?? 0
     await mutation.mutateAsync({ line, quantity: current + line.quantity })
-    toast.success('Added to your bag')
+    toast.success(t('Added to your bag'))
   }
   const subtotal = lines.reduce((sum, line) => {
     try {

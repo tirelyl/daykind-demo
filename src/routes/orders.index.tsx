@@ -1,14 +1,18 @@
+import { useTranslation } from 'react-i18next'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowRight, UserRound } from 'lucide-react'
 import { toast } from 'sonner'
 import { useAuth } from '../lib/auth'
 import { useOrders } from '../lib/orders'
+import { formatDate } from '../lib/i18n'
 import { defaultSearch, money } from '../lib/catalog'
 import { Empty, ErrorState, Loading } from '../components/states'
 import { Button } from '../components/ui/button'
 
 export const Route = createFileRoute('/orders/')({ component: Orders })
 function Orders() {
+  const { t } = useTranslation()
+
   const auth = useAuth()
   const query = useOrders()
   if (auth.loading) return <Loading />
@@ -16,21 +20,21 @@ function Orders() {
     return (
       <div className="wrap section account-panel">
         <UserRound size={30} />
-        <h1>Your everyday, all together.</h1>
-        <p>Sign in to view your saved orders.</p>
+        <h1>{t('Your everyday, all together.')}</h1>
+        <p>{t('Sign in to view your saved orders.')}</p>
         <Button asChild>
           <Link to="/auth" search={{ redirect: '/orders' }}>
-            Sign in
+            {t('Sign in')}
             <ArrowRight size={16} />
           </Link>
         </Button>
       </div>
     )
-  if (query.isPending) return <Loading label="Finding your orders…" />
+  if (query.isPending) return <Loading label={t('Finding your orders…')} />
   if (query.isError)
     return (
       <ErrorState
-        message="Your orders could not be loaded."
+        message={t('Your orders could not be loaded.')}
         retry={() => void query.refetch()}
       />
     )
@@ -38,8 +42,8 @@ function Orders() {
     <div className="wrap section orders-page">
       <div className="section-heading">
         <div>
-          <p className="section-kicker">Make yourself at home</p>
-          <h1>Your good things.</h1>
+          <p className="section-kicker">{t('Make yourself at home')}</p>
+          <h1>{t('Your good things.')}</h1>
           <p className="muted">{auth.user.email}</p>
         </div>
         <Button
@@ -47,19 +51,23 @@ function Orders() {
           onClick={() =>
             void auth
               .signOut()
-              .catch(() => toast.error('Sign out failed. Please retry.'))
+              .catch(() => toast.error(t('Sign out failed. Please retry.')))
           }
         >
-          Sign out
+          {t('Sign out')}
         </Button>
       </div>
       <p className="orders-demo-note">
-        All orders below use simulated payments. No real money has been charged.
+        {t(
+          'All orders below use simulated payments. No real money has been charged.',
+        )}
       </p>
       {!query.data.length ? (
         <Empty
-          title="The start of something good."
-          description="Your first everyday favorite is waiting in the collection."
+          title={t('The start of something good.')}
+          description={t(
+            'Your first everyday favorite is waiting in the collection.',
+          )}
         />
       ) : (
         <div className="order-list">
@@ -75,26 +83,31 @@ function Orders() {
                   <img
                     key={item.id}
                     src={item.image}
-                    alt={item.name}
+                    alt={t(item.name)}
                     width={96}
                     height={96}
                   />
                 ))}
               </div>
               <div className="order-card-copy">
-                <h2>Order {order.id.slice(0, 8).toUpperCase()}</h2>
+                <h2>
+                  {t('Order {{id}}', {
+                    id: order.id.slice(0, 8).toUpperCase(),
+                  })}
+                </h2>
                 <p>
-                  {new Date(order.created_at).toLocaleDateString('en-US', {
-                    dateStyle: 'medium',
-                  })}{' '}
-                  ·{' '}
-                  {order.order_items.reduce((n, item) => n + item.quantity, 0)}{' '}
-                  items
+                  {formatDate(order.created_at)} ·{' '}
+                  {t('items', {
+                    count: order.order_items.reduce(
+                      (n, item) => n + item.quantity,
+                      0,
+                    ),
+                  })}
                 </p>
                 <span className={`status-pill ${order.payment_status}`}>
                   {order.payment_status === 'succeeded'
-                    ? 'Confirmed · Mock payment'
-                    : 'Payment failed · Mock payment'}
+                    ? t('Confirmed · Mock payment')
+                    : t('Payment failed · Mock payment')}
                 </span>
               </div>
               <strong>{money(order.total)}</strong>
@@ -104,7 +117,7 @@ function Orders() {
         </div>
       )}
       <Link to="/products" search={defaultSearch} className="text-link">
-        Find another favorite
+        {t('Find another favorite')}
         <ArrowRight size={16} />
       </Link>
     </div>

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowLeft, ArrowRight, LockKeyhole } from 'lucide-react'
 import { BagLine, Summary } from '../components/bag'
@@ -9,9 +10,11 @@ import { useAuth } from '../lib/auth'
 
 export const Route = createFileRoute('/cart')({ component: Cart })
 function Cart() {
+  const { t } = useTranslation()
+
   const cart = useCart()
   const { user } = useAuth()
-  if (cart.loading) return <Loading label="Opening your bag…" />
+  if (cart.loading) return <Loading label={t('Opening your bag…')} />
   if (cart.error)
     return (
       <div className="wrap section">
@@ -21,37 +24,42 @@ function Cart() {
   if (!cart.lines.length)
     return (
       <Empty
-        title="Your bag has room for good things."
-        description="Find something that makes your everyday a little better."
+        title={t('Your bag has room for good things.')}
+        description={t(
+          'Find something that makes your everyday a little better.',
+        )}
       />
     )
   return (
     <div className="wrap section">
       <div className="section-heading">
         <div>
-          <p className="section-kicker">Your everyday, in the making</p>
+          <p className="section-kicker">{t('Your everyday, in the making')}</p>
           <h1>
-            Your bag <span className="heading-count">({cart.count})</span>
+            {t('Your bag')}
+            <span className="heading-count">({cart.count})</span>
           </h1>
         </div>
         <Link className="text-link" to="/products" search={defaultSearch}>
           <ArrowLeft size={16} />
-          Keep exploring
+          {t('Keep exploring')}
         </Link>
       </div>
       <div className="cart-layout">
         <div>
           <div className="bag-heading">
-            <span>The good things</span>
-            <span>Total</span>
+            <span>{t('The good things')}</span>
+            <span>{t('Total')}</span>
           </div>
           {cart.lines.map((line) => (
             <BagLine key={line.sku} line={line} />
           ))}
           <p className="cart-persistence">
             {user
-              ? 'Your bag is saved to your account.'
-              : 'Your bag is saved on this device. Sign in at checkout to keep it with you.'}
+              ? t('Your bag is saved to your account.')
+              : t(
+                  'Your bag is saved on this device. Sign in at checkout to keep it with you.',
+                )}
           </p>
         </div>
         <Summary>
@@ -60,15 +68,15 @@ function Cart() {
               to={user ? '/checkout' : '/auth'}
               search={user ? undefined : { redirect: '/checkout' }}
             >
-              Continue to checkout
+              {t('Continue to checkout')}
               <ArrowRight size={17} />
             </Link>
           </Button>
           <p className="secure-note">
             <LockKeyhole size={13} />
             {user
-              ? 'Account connected · Mock payment'
-              : 'Sign in to continue · Mock payment'}
+              ? t('Account connected · Mock payment')
+              : t('Sign in to continue · Mock payment')}
           </p>
         </Summary>
       </div>
