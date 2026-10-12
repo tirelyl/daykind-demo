@@ -93,7 +93,7 @@ export function Shell() {
               </SheetTrigger>
               <SheetContent side="left">
                 <SheetHeader>
-                  <SheetTitle>Everyday Edit</SheetTitle>
+                  <SheetTitle>Daykind</SheetTitle>
                   <SheetDescription>
                     {t('Good things for everyday living.')}
                   </SheetDescription>
@@ -104,11 +104,11 @@ export function Shell() {
               </SheetContent>
             </Sheet>
           </div>
-          <Link to="/" className="brand" aria-label={t('Everyday Edit home')}>
+          <Link to="/" className="brand" aria-label={t('Daykind home')}>
             <span className="brand-mark">
               <Leaf size={25} strokeWidth={1.4} />
             </span>
-            everyday edit<span className="brand-period">.</span>
+            Daykind<span className="brand-period">.</span>
           </Link>
           <nav className="desktop-nav" aria-label={t('Main navigation')}>
             {nav}
@@ -178,7 +178,7 @@ export function Shell() {
         <div className="wrap footer-grid">
           <div>
             <Link className="brand" to="/">
-              everyday edit.
+              Daykind.
             </Link>
             <p>
               {t('Thoughtful objects.')}
@@ -214,7 +214,7 @@ export function Shell() {
           </div>
         </div>
         <div className="wrap footer-bottom">
-          <span>© {new Date().getFullYear()} Everyday Edit</span>
+          <span>© {new Date().getFullYear()} Daykind</span>
           <span>{t('Demo store · All payments are simulated')}</span>
           {auth.user && (
             <button
@@ -246,7 +246,7 @@ export function Shell() {
             <DialogDescription>
               {info === 'story'
                 ? t(
-                    'We believe the things you use every day deserve a little thought. Everyday Edit brings together useful objects with quiet character, for home and wherever the day takes you. This is a demonstration store; products and orders are for testing.',
+                    'We believe the things you use every day deserve a little thought. Daykind brings together useful objects with quiet character, for home and wherever the day takes you. This is a demonstration store; products and orders are for testing.',
                   )
                 : t(
                     'Our demo uses US delivery: $6.99 flat rate, free on merchandise orders of $75 or more. Tax is a demo value of $0. A 30-day return policy is shown for presentation only. No parcels are shipped and no money is charged.',

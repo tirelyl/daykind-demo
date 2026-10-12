@@ -1,7 +1,7 @@
 # Static sites use Render's free hosting; no paid backend service is provisioned.
 services:
   - type: web
-    name: everyday-edit
+    name: daykind-demo
     runtime: static
     buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm build
     staticPublishPath: ./dist

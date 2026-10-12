@@ -34,7 +34,7 @@ const chinese = {
 function updateDocument(language: string) {
   if (typeof document === 'undefined') return
   document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en'
-  document.title = i18n.t('Everyday Edit — Good things for everyday living')
+  document.title = i18n.t('Daykind — Good things for everyday living')
   document
     .querySelector('meta[name="description"]')
     ?.setAttribute(

@@ -1,4 +1,4 @@
-# Everyday Edit design direction
+# Daykind design direction
 
 An English lifestyle shop for considered everyday objects. The first screen pairs a quiet green editorial panel with sunlit interior photography. Product photography, useful details and straightforward shopping actions carry the rest of the experience.
 

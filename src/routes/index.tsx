@@ -129,7 +129,7 @@ function Home() {
       <section className="editorial">
         <div className="wrap editorial-inner">
           <span className="editorial-symbol" aria-hidden="true">
-            ee.
+            d.
           </span>
           <div>
             <p className="section-kicker">{t('Less, but a little better')}</p>

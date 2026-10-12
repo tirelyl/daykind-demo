@@ -5,10 +5,10 @@
 React SPA 使用 TanStack CLI router-only 模式，在临时目录生成后迁入仓库根目录，保留已有 `.git`：
 
 ```bash
-pnpm dlx @tanstack/cli@latest create everyday-edit \
+pnpm dlx @tanstack/cli@latest create daykind-demo \
   --router-only --framework React --package-manager pnpm \
   --toolchain eslint --no-examples --no-git \
-  --target-dir /private/tmp/everyday-edit-scaffold --no-install -y
+  --target-dir /private/tmp/daykind-demo-scaffold --no-install -y
 ```
 
 保留 Vite、文件路由、Router 插件、ESLint 和 TypeScript 结构。最初模板构建通过后开发业务；移除未使用 devtools。路由树始终由 `tsr generate` / Vite 插件生成。

@@ -124,7 +124,7 @@ function Auth() {
         <span>{t('Good things, wherever you are.')}</span>
       </div>
       <div className="auth-form">
-        <p className="section-kicker">{t('Welcome to Everyday Edit')}</p>
+        <p className="section-kicker">{t('Welcome to Daykind')}</p>
         <h1>
           {mode === 'signin'
             ? t('Good to see you.')

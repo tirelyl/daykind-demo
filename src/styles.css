@@ -34,7 +34,7 @@
     @apply bg-background text-foreground;
   }
 }
-/* Everyday Edit: editorial storefront, generous space and quiet color. */
+/* Daykind: editorial storefront, generous space and quiet color. */
 :root {
   --background: #fafaf8;
   --foreground: #202520;

@@ -7,8 +7,8 @@ export const zh = {
   Close: '关闭',
   Notifications: '通知',
   'Close toast': '关闭通知',
-  'Everyday Edit — Good things for everyday living':
-    'Everyday Edit — 日常好物，用心之选',
+  'Daykind — Good things for everyday living':
+    'Daykind — 日常好物，用心之选',
   'Thoughtful objects for your home, your rituals, and wherever the day takes you.':
     '为家、为日常仪式，也为每一次出发，挑选用心的好物。',
   'A little off the beaten path.': '好像走到了别处。',
@@ -32,7 +32,7 @@ export const zh = {
   'Keep your bag close, revisit your orders,': '保存购物袋，随时查看订单，',
   'and make room for a little everyday joy.': '为日常留一点小小美好。',
   'Good things, wherever you are.': '身在何处，都有好物相伴。',
-  'Welcome to Everyday Edit': '欢迎来到 Everyday Edit',
+  'Welcome to Daykind': '欢迎来到 Daykind',
   'Good to see you.': '很高兴，再次见到你。',
   'Sign in to pick up where you left off.': '登录后，继续你的好物之旅。',
   'A few details, and you’re part of the everyday.':
@@ -276,7 +276,7 @@ export const zh = {
   'Open menu': '打开菜单',
   'Good things for everyday living.': '日常好物，用心之选。',
   'Mobile navigation': '手机导航',
-  'Everyday Edit home': 'Everyday Edit 首页',
+  'Daykind home': 'Daykind 首页',
   'Main navigation': '主导航',
   'Search products': '搜索商品',
   'Your account and orders': '我的账号与订单',
@@ -300,8 +300,8 @@ export const zh = {
   'Signed out': '已退出登录',
   'A little more considered.': '为日常，多一点用心。',
   'Good things, delivered.': '好物，送到身边。',
-  'We believe the things you use every day deserve a little thought. Everyday Edit brings together useful objects with quiet character, for home and wherever the day takes you. This is a demonstration store; products and orders are for testing.':
-    '我们相信，每天使用的物件都值得认真挑选。Everyday Edit 汇集实用而有个性的好物，为家，也为你的每一次出发。这是一家演示商店，商品和订单仅供测试。',
+  'We believe the things you use every day deserve a little thought. Daykind brings together useful objects with quiet character, for home and wherever the day takes you. This is a demonstration store; products and orders are for testing.':
+    '我们相信，每天使用的物件都值得认真挑选。Daykind 汇集实用而有个性的好物，为家，也为你的每一次出发。这是一家演示商店，商品和订单仅供测试。',
   'Our demo uses US delivery: $6.99 flat rate, free on merchandise orders of $75 or more. Tax is a demo value of $0. A 30-day return policy is shown for presentation only. No parcels are shipped and no money is charged.':
     '演示采用美国配送：运费 US$6.99，商品满 US$75 免运费。税费演示值为 US$0。30 天退货政策仅供展示，不会实际发货或扣款。',
   'Loading the good things…': '正在加载好物…',
