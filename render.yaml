@@ -1,0 +1,30 @@
+# Static sites use Render's free hosting; no paid backend service is provisioned.
+services:
+  - type: web
+    name: everyday-edit
+    runtime: static
+    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm build
+    staticPublishPath: ./dist
+    envVars:
+      - key: NODE_VERSION
+        value: 24.18.0
+      - key: VITE_SUPABASE_URL
+        sync: false
+      - key: VITE_SUPABASE_PUBLISHABLE_KEY
+        sync: false
+      - key: VITE_ENABLE_CATALOG_MOCK
+        value: 'true'
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /mockServiceWorker.js
+        name: Cache-Control
+        value: no-cache
+      - path: /mockServiceWorker.js
+        name: Service-Worker-Allowed
+        value: /
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff

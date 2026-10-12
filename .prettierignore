@@ -1,0 +1,9 @@
+node_modules/
+dist/
+pnpm-lock.yaml
+src/routeTree.gen.ts
+public/mockServiceWorker.js
+supabase/.temp/
+.artifacts/
+playwright-report/
+test-results/
